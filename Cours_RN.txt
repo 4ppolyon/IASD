@@ -1,0 +1,43 @@
+Produit scalaire de
+	x1		y1
+X = 	x2 et Y =	y2
+
+x1*y1+x2*y2
+
+Produit matriciel.
+	-1 1
+A =	 3 4
+
+	3 7 1
+B =	0 8 2
+
+AxB = 	-3+0 -7+8 -1+2
+	  9  21+32 3+8
+	  
+donc 	-3 1 1
+	9 53 11
+	
+Bon grosso modo un perceptron c'est :
+
+CE	CC1 ... CCk	CS
+
+	h11	h1k			CE  = couche entrée (des données d'entrée)
+x1	h21	h2k			CCx = couche caché numéro x
+x2	h31	h3k	y		CS  = couche sortie (un réel)
+x3	h41	h4k
+		h5k
+
+On relie toutes les couches pt par pt du coup ça fait un bordel de segment
+
+Pour passé de CE a CC1 en gros pour chaque nombre de neurone de la couche qu'on note b tu calcule le sigma de la somme des produits de chaque valeur de CE et d'une valeur généré aléatoirement nommée wab avec a le numéro de la valeur de CE et b le numero du CC1 qu'on fait (sans oublier le biais Bb).
+On fait ca avec des wab toujours généré aléatoirement pour tout CC1. Donc on a avec CE a 3 neurones et CC1 a 2 neurones
+CC1
+h1 = sigma(x1 * w11 + x2 * w21 + x3 * w31 + B1)
+h2 = sigma(x1 * w12 + x2 * w22 + x3 * w32 + B2)
+
+Pour passer de CCk a CS on fait la même chose avec w'b des valeurs générées aléatoirement
+CS
+y = sigma(h1 * w'1 + h2 * w'2 + h3 * w'3 + B)
+
+ensuite on evalue le risque empirique
+somme(i = 1 ,n,(y_attendu⁽i⁾ - MLP(x⁽i⁾)) avec n le nombre de jeux de test i qui est chaque test qu'on va faire et MLP(x⁽i⁾) le calcul de y avec comme CE le vecteur de donnée x numéro i (on a une liste de n vecteur de donnée).
