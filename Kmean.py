@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from sklearn import datasets
 import random
 
+
 # Define a function to calculate the distance between two points
 def distance(point1, point2):
     return np.sqrt(np.sum((point1 - point2) ** 2))
@@ -45,7 +46,8 @@ def display(centroids):
         plt.scatter(centroids[centroid]["point"][1], centroids[centroid]["point"][0], c=centroids[centroid]["color"],
                     marker='x',
                     s=100)  # for each centroid, display it with a cross
-        for point in centroids[centroid]["points"]:  # for each point associated to the centroid, display it with the centroid's color
+        for point in centroids[centroid][
+            "points"]:  # for each point associated to the centroid, display it with the centroid's color
             plt.scatter(point[1], point[0], c=centroids[centroid]["color"])
     plt.show()
 
