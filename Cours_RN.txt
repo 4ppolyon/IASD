@@ -1,8 +1,9 @@
 Produit scalaire de
-	x1		y1
-X = 	x2 et Y =	y2
+	x1			y1
+X = 	x2 	et 	Y =	y2
 
 x1*y1+x2*y2
+_______________________________________________________________________________
 
 Produit matriciel.
 	-1 1
@@ -16,8 +17,9 @@ AxB = 	-3+0 -7+8 -1+2
 	  
 donc 	-3 1 1
 	9 53 11
-	
-Bon grosso modo un perceptron c'est :
+_______________________________________________________________________________
+
+Perceptron multicouche (MLP) c'est : (pas fini)
 
 CE	CC1 ... CCk	CS
 
@@ -41,3 +43,72 @@ y = sigma(h1 * w'1 + h2 * w'2 + h3 * w'3 + B)
 
 ensuite on evalue le risque empirique
 somme(i = 1 ,n,(y_attendu⁽i⁾ - MLP(x⁽i⁾)) avec n le nombre de jeux de test i qui est chaque test qu'on va faire et MLP(x⁽i⁾) le calcul de y avec comme CE le vecteur de donnée x numéro i (on a une liste de n vecteur de donnée).
+_______________________________________________________________________________
+
+Réseau a Convolution :
+
+un noyeau c'est une matrice carré avec des valeure dedans qui doit etre en dimension multiple inferieur de la dim de l'image. (En gros pour une image 6*6 on peut prendre un noyeu en 3*3).
+On a une image avec des valeurs entre 0 et 1 pour N&B et du coup on va parcourir l'image avec un décalage nomé stride.
+
+A B C D E F		X X X							X X X D E F					A X X X E F
+A B C D E F		X X X Le noyeau						X X X D E F					A X X X E F
+A B C D E F  L'image 	X X X							X X X D E F puis si on a un stride de 1 	A X X X E F voila !
+A B C D E F				et bah on va se balader comme ca 	A B C D E F					A B C D E F
+A B C D E F									A B C D E F					A B C D E F
+A B C D E F									A B C D E F					A B C D E F
+
+Application du noyeau : Quand on se balade on vas reconstruire une image avec pour chaque valeur la somme des matrice du noyeau et de la plage de l'image couverte par ce dernier.
+
+s : valeur de stride (si jamais s = 1 passe toujours par definition)
+k : le nombre de fois qu'on applique le noyeau
+p : valeur dimension en largeur du noyeau
+
+n = p + (k-1)*s
+n : nombre de pixels en largeur couvert par les applications du noyeau.
+
+La taille de l'image créé par l'application du noyeau est de taille k*k.
+
+ensuite on prend notre matrice et on lui fait un trubo MAXpooling ou un dropout.
+exemple MAXpooling((2x2),stride=1) qui reviens a faire :
+1) Créer une matrice 2*2	2)Le passer sur la matrice 
+X X				X X C D E F		A X X D E F
+X X				X X C D E F		A X X D E F
+				A B C D E F	puis	A B C D E F 	à chaque fois on prend le max des valeurs couverte par la matrice (2x2)
+				A B C D E F		A B C D E F 	et on reconstruit une nouvelle matrice uniquement faite de ces valeurs.
+				A B C D E F		A B C D E F
+				A B C D E F		A B C D E F
+
+Et ensuite on passe ca dans un réseau de neurone classique.
+_______________________________________________________________________________
+
+Non supervisé :
+
+Un cluster c'est une methode qui met dans des classes differentes les objets éloigner a étudier et inversement les objets proches.
+
+Cluster sof (souple) : Un document (objet) peut appartenir a plusieurs groupes (classes) INVERSEMENT Cluster hard (DUR) : Un objet appartient a une seule classe.
+Classes à plat : Pas de relation entre les differentes classes (ex : chat et ventilateur)
+Classes hierarchiques  : Une hierarchie qui impose un ordre entre les classes (genre chien et labrador)
+
+
+Partitionnement dur à plat
+Exemple : kmean
+On choisi arbitrairement 1 représentant de chaque classes qu'on appelera Gamma_k avec k le nombre de classe
+On calcule la distance aux Gamma_k pour chaque points en cherchant a diminuer cette distance.
+Mathématiquement c'est :
+La valeur minimal (arg min) de [La Sum pour chaque classe (de 1 à k) de [la Sum de chaque documents (chaque d en concidérant la classe k) de [la distance entre le Gamma_k et le document]]] (aucun sens selon Rom3 et moi)
+Informariquement c'est :
+e = {doc1, doc2,... ,docN)
+K = nb_classes
+T = max iteration (nombre de passage sur chaque document)
+t = 0
+centroide = point a la moyenne des coords 
+stability = tous les doc ont pas changer de classe a l'iteration
+while (t<T or stability){
+	for d in e {
+		calcule distance min entre d et chaque Gamma_k
+		on ajoute a la classe k tout les d qui ont pour distance minimum parmis les Gammas Gamma_k
+	}
+	for k=1 à K {
+		on met comme nouveau représentant de classe un point centroïde aux coord des docs et des old représentants de la classe en question.
+	}
+}
