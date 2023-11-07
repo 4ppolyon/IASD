@@ -101,6 +101,7 @@ e = {doc1, doc2,... ,docN)
 K = nb_classes
 T = max iteration (nombre de passage sur chaque document)
 t = 0
+N = nombre de points
 centroide = point a la moyenne des coords 
 stability = tous les doc ont pas changer de classe a l'iteration
 while (t<T or stability){
@@ -112,3 +113,13 @@ while (t<T or stability){
 		on met comme nouveau représentant de classe un point centroïde aux coord des docs et des old représentants de la classe en question.
 	}
 }
+Gk c'est le groupe de point associé a chaque centroide
+Fonction qu'on veut minimize argmin(somme de 1 a K(somme des x dans Gk((distance eucli entre x et rk)²))
+
+VF : c'est la somme des distance euclidienne² de chaque points avec son centroide.
+Le nombre de classe il y a plein de methodes diff (voir methode de ELbow)
+
+Complexité K*N*T
+
+Pour CAH c'est log(N)*N² BEAUCOUP PLUS GRAND
+
